@@ -1,0 +1,91 @@
+services:
+  userservice:
+    build:
+      context: ./UserService
+    environment:
+      - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
+    ports:
+      - "5000:80"
+      - "5001:443"
+    volumes:
+      - ${HOME}/.aspnet/https:/https:ro
+
+  productservice:
+    build:
+      context: ./ProductService
+    environment:
+      - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
+    ports:
+      - "5002:80"
+      - "5003:443"
+    volumes:
+      - ${HOME}/.aspnet/https:/https:ro
+
+  cartservice:
+    build:
+      context: ./CartService
+    environment:
+      - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
+    ports:
+      - "5004:80"
+      - "5005:443"
+    volumes:
+      - ${HOME}/.aspnet/https:/https:ro
+
+  orderservice:
+    build:
+      context: ./OrderService
+    environment:
+      - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
+    ports:
+      - "5006:80"
+      - "5007:443"
+    volumes:
+      - ${HOME}/.aspnet/https:/https:ro
+
+  paymentservice:
+    build:
+      context: ./PaymentService
+    environment:
+      - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
+    ports:
+      - "5008:80"
+      - "5009:443"
+    volumes:
+      - ${HOME}/.aspnet/https:/https:ro
+
+  notificationservice:
+    build:
+      context: ./NotificationService
+    environment:
+      - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
+    ports:
+      - "5010:80"
+      - "5011:443"
+    volumes:
+      - ${HOME}/.aspnet/https:/https:ro
+
+  apigateway:
+    build:
+      context: ./ApiGateway
+    environment:
+      - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
+    ports:
+      - "5012:80"
+      - "5013:443"
+    volumes:
+      - ${HOME}/.aspnet/https:/https:ro
