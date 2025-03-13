@@ -10,18 +10,21 @@ public class CartRepository(IConnectionMultiplexer redis)
 
 	public async Task<Cart?> GetCartAsync(string userId)
 	{
-		var data = await _database.StringGetAsync(userId);
+		var key = $"cart:{userId}";
+		var data = await _database.StringGetAsync(key);
 		return data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<Cart>(data!);
 	}
 
 	public async Task SaveCartAsync(Cart cart)
 	{
 		var jsonData = JsonSerializer.Serialize(cart);
-		await _database.StringSetAsync(cart.UserId, jsonData);
+		var key = $"cart:{cart.UserId}";
+		await _database.StringSetAsync(key, jsonData);
 	}
 
 	public async Task DeleteCartAsync(string userId)
 	{
-		await _database.KeyDeleteAsync(userId);
+		var key = $"cart:{userId}";
+		await _database.KeyDeleteAsync(key);
 	}
 }
