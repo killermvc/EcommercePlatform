@@ -6,6 +6,7 @@ services:
       - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
+      - ConnectionStrings__DefaultConnection=Server=UserDb;Database=UserServiceDb;User=UserService;Password=12345;
     ports:
       - "5000:80"
       - "5001:443"
@@ -19,6 +20,7 @@ services:
       - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
+      - ConnectionStrings__DefaultConnection=Server=localhost;Database=ProductServiceDb;User=ProductService;Password=12345;
     ports:
       - "5002:80"
       - "5003:443"
@@ -89,3 +91,33 @@ services:
       - "5013:443"
     volumes:
       - ${HOME}/.aspnet/https:/https:ro
+
+  userdb:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: UserServiceDb
+      MYSQL_USER: UserService
+      MYSQL_PASSWORD: 12345
+      MYSQL_ROOT_PASSWORD: 12345
+    ports:
+      - "3307:3306"
+    volumes:
+      - userdb-data:/var/lib/mysql
+
+  productdb:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ProductServiceDb
+      MYSQL_USER: ProductService
+      MYSQL_PASSWORD: 12345
+      MYSQL_ROOT_PASSWORD: 12345
+    ports:
+      - "3308:3306"
+    volumes:
+      - productdb-data:/var/lib/mysql
+
+volumes:
+  userdb-data:
+    driver: local
+  productdb-data:
+    driver: local
