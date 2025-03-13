@@ -12,7 +12,6 @@ namespace UserService.Controllers;
 [ApiController]
 public class AuthController(UserManager<ApplicationUser> _userManager, IConfiguration _configuration) : ControllerBase
 {
-
 	[HttpPost("register")]
 	public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
 	{
