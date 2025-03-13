@@ -16,7 +16,6 @@ public class Product
 	public static Product FromDto(ProductDto product)
 	{
 		return new Product {
-			Id = product.Id,
 			Name = product.Name,
 			Description = product.Description,
 			Price = product.Price,
@@ -29,6 +28,7 @@ public class Product
 	{
 		return new ProductDto
 		{
+			Id = Id,
 			Name = Name,
 			Description = Description,
 			Price = Price,
