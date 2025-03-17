@@ -3,11 +3,17 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 EXPOSE 80
 
+
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
-COPY ["ProductService.csproj", "ProductService/"]
+
+ARG CONTEXT_PATH=.
+
+COPY ["${CONTEXT_PATH}/CONTEXT_PATH/Common/Common.csproj", "Common/"]
+COPY ["${CONTEXT_PATH}/ProductService.csproj", "ProductService/"]
 RUN dotnet restore "ProductService/ProductService.csproj"
 
+COPY ../Common Common/
 COPY . /src/ProductService
 WORKDIR "/src/ProductService"
 RUN dotnet build "ProductService.csproj" -c Release -o /app/build

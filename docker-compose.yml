@@ -2,11 +2,13 @@ services:
   userservice:
     build:
       context: ./UserService
+    depends_on:
+      - userdb
     environment:
       - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
-      - ConnectionStrings__DefaultConnection=Server=UserDb;Database=UserServiceDb;User=UserService;Password=12345;
+      - ConnectionStrings__DefaultConnection=Server=userdb;Database=UserServiceDb;User=UserService;Password=12345;
     ports:
       - "5000:80"
       - "5001:443"
@@ -15,12 +17,14 @@ services:
 
   productservice:
     build:
-      context: ./ProductService
+      context: .
+    depends_on:
+      - productdb
     environment:
       - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
-      - ConnectionStrings__DefaultConnection=Server=localhost;Database=ProductServiceDb;User=ProductService;Password=12345;
+      - ConnectionStrings__DefaultConnection=Server=productdb;Database=ProductServiceDb;User=ProductService;Password=12345;
     ports:
       - "5002:80"
       - "5003:443"
@@ -30,6 +34,8 @@ services:
   cartservice:
     build:
       context: ./CartService
+    depends_on:
+      - redis
     environment:
       - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
@@ -58,10 +64,13 @@ services:
   paymentservice:
     build:
       context: ./PaymentService
+    depends_on:
+      - paymentdb
     environment:
       - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
+      - ConnectionStrings__DefaultConnection=Server=paymentdb;Database=PaymentServiceDb;User=PaymentService;Password=12345;
     ports:
       - "5008:80"
       - "5009:443"
@@ -118,13 +127,28 @@ services:
     volumes:
       - productdb-data:/var/lib/mysql
 
-    redis:
-      image: redis
-      ports:
-        - "6379:6379"
+  paymentdb:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: PaymentServiceDb
+      MYSQL_USER: PaymentService
+      MYSQL_PASSWORD: 12345
+      MYSQL_ROOT_PASSWORD: 12345
+    ports:
+      - "3309:3306"
+    volumes:
+      - paymentdb-data:/var/lib/mysql
+
+  redis:
+    image: redis
+    ports:
+    - "6380:6379"
+
 
 volumes:
   userdb-data:
     driver: local
   productdb-data:
+    driver: local
+  paymentdb-data:
     driver: local
