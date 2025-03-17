@@ -6,13 +6,12 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-ARG CONTEXT_PATH=.
-
-COPY ["${CONTEXT_PATH}/CONTEXT_PATH/Common/Common.csproj", "Common/"]
-COPY ["${CONTEXT_PATH}/PaymentService.csproj", "PaymentService/"]
+COPY ["Common/Common.csproj", "Common/"]
+COPY ["PaymentService/PaymentService.csproj", "PaymentService/"]
 RUN dotnet restore "PaymentService/PaymentService.csproj"
 
-COPY . /src/PaymentService
+COPY PaymentService/ /src/PaymentService
+COPY Common/ /src/Common
 WORKDIR "/src/PaymentService"
 RUN dotnet build "PaymentService.csproj" -c Release -o /app/build
 

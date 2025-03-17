@@ -7,14 +7,12 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-ARG CONTEXT_PATH=.
-
-COPY ["${CONTEXT_PATH}/CONTEXT_PATH/Common/Common.csproj", "Common/"]
-COPY ["${CONTEXT_PATH}/ProductService.csproj", "ProductService/"]
+COPY ["Common/Common.csproj", "Common/"]
+COPY ["ProductService/ProductService.csproj", "ProductService/"]
 RUN dotnet restore "ProductService/ProductService.csproj"
 
-COPY ../Common Common/
-COPY . /src/ProductService
+COPY /Common Common/
+COPY /ProductService /src/ProductService
 WORKDIR "/src/ProductService"
 RUN dotnet build "ProductService.csproj" -c Release -o /app/build
 

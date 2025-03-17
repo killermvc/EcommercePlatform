@@ -5,5 +5,5 @@ using PaymentService.Models;
 namespace PaymentService.Data;
 public class PaymentDbContext(DbContextOptions<PaymentDbContext> options) : DbContext(options)
 {
-    public DbSet<Payment> Payments { get; set; }
+    public DbSet<Payment> Payments { get; set; } = null!;
 }

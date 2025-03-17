@@ -5,10 +5,12 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
-COPY ["CartService.csproj", "CartService/"]
+COPY ["Common/Common.csproj", "Common/"]
+COPY ["CartService/CartService.csproj", "CartService/"]
 RUN dotnet restore "CartService/CartService.csproj"
 
-COPY . /src/CartService
+COPY Common/ /src/Common
+COPY CartService/ /src/CartService
 WORKDIR "/src/CartService"
 RUN dotnet build "CartService.csproj" -c Release -o /app/build
 

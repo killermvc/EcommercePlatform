@@ -1,7 +1,8 @@
 services:
   userservice:
     build:
-      context: ./UserService
+      context: .
+      dockerfile: ./UserService/Dockerfile
     depends_on:
       - userdb
     environment:
@@ -18,6 +19,7 @@ services:
   productservice:
     build:
       context: .
+      dockerfile: ./ProductService/Dockerfile
     depends_on:
       - productdb
     environment:
@@ -33,7 +35,8 @@ services:
 
   cartservice:
     build:
-      context: ./CartService
+      context: .
+      dockerfile: ./CartService/Dockerfile
     depends_on:
       - redis
     environment:
@@ -50,7 +53,8 @@ services:
 
   orderservice:
     build:
-      context: ./OrderService
+      context: .
+      dockerfile: ./OrderService/Dockerfile
     environment:
       - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
@@ -63,7 +67,8 @@ services:
 
   paymentservice:
     build:
-      context: ./PaymentService
+      context: .
+      dockerfile: ./PaymentService/Dockerfile
     depends_on:
       - paymentdb
     environment:
@@ -79,7 +84,8 @@ services:
 
   notificationservice:
     build:
-      context: ./NotificationService
+      context: .
+      dockerfile: ./NotificationService/Dockerfile
     environment:
       - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
@@ -92,7 +98,8 @@ services:
 
   apigateway:
     build:
-      context: ./ApiGateway
+      context: .
+      dockerfile: ./ApiGateway/Dockerfile
     environment:
       - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx

@@ -5,10 +5,12 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
-COPY ["OrderService.csproj", "OrderService/"]
+COPY ["Common/Common.csproj", "Common/"]
+COPY ["OrderService/OrderService.csproj", "OrderService/"]
 RUN dotnet restore "OrderService/OrderService.csproj"
 
-COPY . /src/OrderService
+COPY Common/ /src/Common
+COPY OrderService/ /src/OrderService
 WORKDIR "/src/OrderService"
 RUN dotnet build "OrderService.csproj" -c Release -o /app/build
 
