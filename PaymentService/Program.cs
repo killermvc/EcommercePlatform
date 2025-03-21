@@ -30,7 +30,7 @@ if (app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope())
 {
 
-    var dbContext = scope.ServiceProvider.GetRequiredService<PaymentDbContext>(); 
+    var dbContext = scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
 
 	dbContext.Database.EnsureCreated();
 

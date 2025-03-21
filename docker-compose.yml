@@ -90,6 +90,7 @@ services:
       - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
+      - ConnectionStrings__DefaultConnection=Server=notificationdb;Database=NotificationServiceDb;User=NotificationService;Password=12345;
     ports:
       - "5010:80"
       - "5011:443"
@@ -146,6 +147,18 @@ services:
     volumes:
       - paymentdb-data:/var/lib/mysql
 
+  notificationdb:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: NotificationServiceDb
+      MYSQL_USER: NotificationService
+      MYSQL_PASSWORD: 12345
+      MYSQL_ROOT_PASSWORD: 12345
+    ports:
+      - "3309:3306"
+    volumes:
+      - notificationdb-data:/var/lib/mysql
+
   redis:
     image: redis
     ports:
@@ -158,4 +171,6 @@ volumes:
   productdb-data:
     driver: local
   paymentdb-data:
+    driver: local
+  notificationdb-data:
     driver: local
