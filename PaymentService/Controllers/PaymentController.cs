@@ -8,7 +8,7 @@ using Common.DTOs;
 namespace PaymentService.Controllers;
 
 [ApiController]
-[Route("api/payments")]
+[Route("payments")]
 public class PaymentController(PaymentServiceClass _paymentService) : ControllerBase
 {
 
@@ -16,7 +16,16 @@ public class PaymentController(PaymentServiceClass _paymentService) : Controller
     public async Task<IActionResult> ProcessPayment([FromBody] PaymentRequestDto request)
     {
         var response = await _paymentService.ProcessPayment(request);
-        return response.Status == PaymentStatus.Completed.ToString() ? Ok(response) : BadRequest(response);
+		if(response.Status == PaymentStatus.Completed.ToString())
+		{
+			response.Success = true;
+			return Ok(response);
+		}
+		else
+		{
+			response.Success = false;
+			return BadRequest(response);
+		}
     }
 
     [HttpGet("{orderId}")]
@@ -29,7 +38,8 @@ public class PaymentController(PaymentServiceClass _paymentService) : Controller
         {
             PaymentId = payment.Id,
             OrderId = payment.OrderId,
-            Status = payment.Status.ToString()
+            Status = payment.Status.ToString(),
+			Success = payment.Status == PaymentStatus.Completed
         });
     }
 }

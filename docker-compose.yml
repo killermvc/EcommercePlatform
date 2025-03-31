@@ -9,7 +9,7 @@ services:
       - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
-      - ConnectionStrings__DefaultConnection=Server=userdb;Database=UserServiceDb;User=UserService;Password=12345;
+      - ConnectionStrings__DefaultConnection=Server=userdb:3306;Database=UserServiceDb;User=UserService;Password=12345;
     ports:
       - "5000:80"
       - "5001:443"
@@ -26,7 +26,7 @@ services:
       - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
-      - ConnectionStrings__DefaultConnection=Server=productdb;Database=ProductServiceDb;User=ProductService;Password=12345;
+      - ConnectionStrings__DefaultConnection=Server=productdb:3308;Database=ProductServiceDb;User=ProductService;Password=12345;
     ports:
       - "5002:80"
       - "5003:443"
@@ -55,10 +55,13 @@ services:
     build:
       context: .
       dockerfile: ./OrderService/Dockerfile
+    depends_on:
+      - orderdb
     environment:
       - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
+      - ConnectionStrings__DefaultConnection=Server=orderdb:3311;Database=OrderServiceDb;User=OrderService;Password=12345;
     ports:
       - "5006:80"
       - "5007:443"
@@ -75,7 +78,7 @@ services:
       - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
-      - ConnectionStrings__DefaultConnection=Server=paymentdb;Database=PaymentServiceDb;User=PaymentService;Password=12345;
+      - ConnectionStrings__DefaultConnection=Server=paymentdb:3309;Database=PaymentServiceDb;User=PaymentService;Password=12345;
     ports:
       - "5008:80"
       - "5009:443"
@@ -90,7 +93,7 @@ services:
       - ASPNETCORE_URLS=https://0.0.0.0+:443;http://0.0.0.0+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
-      - ConnectionStrings__DefaultConnection=Server=notificationdb;Database=NotificationServiceDb;User=NotificationService;Password=12345;
+      - ConnectionStrings__DefaultConnection=Server=notificationdb:3310;Database=NotificationServiceDb;User=NotificationService;Password=12345;
     ports:
       - "5010:80"
       - "5011:443"
@@ -155,9 +158,21 @@ services:
       MYSQL_PASSWORD: 12345
       MYSQL_ROOT_PASSWORD: 12345
     ports:
-      - "3309:3306"
+      - "3310:3306"
     volumes:
       - notificationdb-data:/var/lib/mysql
+
+  orderdb:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: OrderServiceDb
+      MYSQL_USER: OrderService
+      MYSQL_PASSWORD: 12345
+      MYSQL_ROOT_PASSWORD: 12345
+    ports:
+      - "3311:3306"
+    volumes:
+      - orderdb-data:/var/lib/mysql
 
   redis:
     image: redis
@@ -173,4 +188,6 @@ volumes:
   paymentdb-data:
     driver: local
   notificationdb-data:
+    driver: local
+  orderdb-data:
     driver: local
